@@ -50,13 +50,14 @@ int main() {
     // However, we do not provide such a step in this example.
     // Therefore, we use a brute force way to create a large LWE ciphertext.
     uint32_t logQ = 17;
-    cc.GenerateBinFHEContext(STD128, false, logQ, 0, GINX, false);
+    cc.GenerateBinFHEContext(TOY, false, logQ, 0, GINX, false);
 
     uint32_t Q = 1 << logQ;
 
     int q      = 4096;                                               // q
     int factor = 1 << int(logQ - log2(q));                           // Q/q
     int p      = cc.GetMaxPlaintextSpace().ConvertToInt() * factor;  // Obtain the maximum plaintext space
+    std::cout << "p = " << p << std::endl;
 
     // Sample Program: Step 2: Key Generation
     // Generate the secret key
@@ -80,7 +81,7 @@ int main() {
 
         LWEPlaintext result;
         cc.Decrypt(sk, ct1, &result, 2, q);
-        std::cout << "Input: " << i << ". Expected sign: " << (i >= 3)
+        std::cout << "Input: " << p/2 + i - 3 << ". Expected sign: " << (i >= 3)
                   << ". "
                      "Evaluated Sign: "
                   << result << std::endl;

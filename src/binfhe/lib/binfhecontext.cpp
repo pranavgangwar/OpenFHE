@@ -44,10 +44,12 @@ void BinFHEContext::GenerateBinFHEContext(uint32_t n, uint32_t N, const NativeIn
                                           BINFHEMETHOD method) {
     auto lweparams = std::make_shared<LWECryptoParams>(n, N, q, Q, Q, std, baseKS);
     m_params       = std::make_shared<RingGSWCryptoParams>(lweparams, baseG, baseR, method);
+    std::cout << "GenerateBinFHEContext-1" << std::endl;
 }
 
 void BinFHEContext::GenerateBinFHEContext(BINFHEPARAMSET set, bool arbFunc, uint32_t logQ, int64_t N,
                                           BINFHEMETHOD method, bool timeOptimization) {
+    
     if (GINX != method) {
         std::string errMsg("ERROR: GINX is the only supported method");
         OPENFHE_THROW(not_implemented_error, errMsg);
@@ -84,6 +86,7 @@ void BinFHEContext::GenerateBinFHEContext(BINFHEPARAMSET set, bool arbFunc, uint
     m_timeOptimization = timeOptimization;
     SecurityLevel sl   = HEStd_128_classic;
     // choose minimum ringD satisfying sl and Q
+    std::cout << "Logqprime = " << logQprime << std::endl;
     uint32_t ringDim = StdLatticeParm::FindRingDim(HEStd_ternary, sl, logQprime);
     if (N >= ringDim) {  // if specified some larger N, security is also satisfied
         ringDim = N;
@@ -99,6 +102,10 @@ void BinFHEContext::GenerateBinFHEContext(BINFHEPARAMSET set, bool arbFunc, uint
     uint32_t n     = (set == TOY) ? 32 : 1305;
     auto lweparams = std::make_shared<LWECryptoParams>(n, ringDim, q, Q.ConvertToInt(), qKS, 3.19, 32);
     m_params = std::make_shared<RingGSWCryptoParams>(lweparams, baseG, 23, method, ((logQ != 11) && timeOptimization));
+
+    std::cout << "GenerateBinFHEContext-2" << std::endl;
+    std::cout << "Method -> " << method << " log2Q = " << log2(Q.ConvertToInt()) << " log2q = "<< log2(q) << " log2qKS = " << log2(qKS) << " N = " << ringDim << " n = "<< n << std::endl << std::endl;
+
 
 #if defined(BINFHE_DEBUG)
     std::cout << ringDim << " " << Q < < < < " " << n << " " << q << " " << baseG << std::endl;
@@ -167,6 +174,8 @@ void BinFHEContext::GenerateBinFHEContext(BINFHEPARAMSET set, BINFHEMETHOD metho
                                                            params.stdDev, params.baseKS);
 
     m_params = std::make_shared<RingGSWCryptoParams>(lweparams, params.gadgetBase, params.baseRK, method);
+
+    std::cout << "GenerateBinFHEContext-3" << std::endl;
 }
 
 LWEPrivateKey BinFHEContext::KeyGen(NativeInteger DiffQ) const {

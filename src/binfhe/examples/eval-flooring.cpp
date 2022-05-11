@@ -41,7 +41,7 @@ int main() {
     // Sample Program: Step 1: Set CryptoContext
     auto cc = BinFHEContext();
 
-    cc.GenerateBinFHEContext(STD128, false);
+    cc.GenerateBinFHEContext(TOY, false);
 
     // Sample Program: Step 2: Key Generation
 
@@ -59,10 +59,11 @@ int main() {
 
     // Obtain the maximum plaintext space
     int p = cc.GetMaxPlaintextSpace().ConvertToInt();
+    std::cout << "p = " << p << std:: endl;
 
     // Number of bits to round down
     auto bits      = 2;
-    uint32_t input = 12;
+    uint32_t input = -1;
     std::cout << "Homomorphically round down the input by " << bits << " bits." << std::endl;
 
     auto ct1 = cc.Encrypt(sk, input % p, FRESH, p);
@@ -75,7 +76,7 @@ int main() {
 
     cc.Decrypt(sk, ctRounded, &result, p / (1 << bits));
 
-    std::cout << "Input: " << input << ". Expected: " << (input >> bits) << ". Evaluated = " << result << std::endl;
+    std::cout << "Input: " << input % p << ". Expected: " << (input % p >> bits) << ". Evaluated = " << result << std::endl;
 
     return 0;
 }

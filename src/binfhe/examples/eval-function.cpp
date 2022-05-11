@@ -56,7 +56,8 @@ int main() {
 
     // Sample Program: Step 3: Create the to-be-evaluated funciton and obtain its corresponding LUT
     int p = cc.GetMaxPlaintextSpace().ConvertToInt();  // Obtain the maximum plaintext space
-
+    std::cout << "p = " << p << std::endl;
+    
     // Initialize Function f(x) = x^3 % p
     auto fp = [](NativeInteger m, NativeInteger p1) -> NativeInteger {
         if (m < p1)

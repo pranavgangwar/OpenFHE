@@ -887,6 +887,10 @@ std::shared_ptr<LWECiphertextImpl> RingGSWAccumulatorScheme::EvalFloor(
     auto b1_mod_q  = b1.Mod(q);
     auto ct0_mod_q = std::make_shared<LWECiphertextImpl>(std::move(a1_mod_q), std::move(b1_mod_q));
 
+    // std::cout << "q = " << q << " bigger_q_local = " << bigger_q_local << std::endl;
+    // std::cout << "a1 = " << a1 << " a1_mod_q = " << a1_mod_q << std::endl;
+    // std::cout << "b1 = " << b1 << " b1_mod_q = " << b1_mod_q << std::endl;
+
     // this is 1/4q_small or -1/4q_small mod q
     auto ct2 = Bootstrap(params, EK, ct0_mod_q, LWEscheme, f1, bigger_q_local);
     auto a2  = a1 - ct2->GetA();
